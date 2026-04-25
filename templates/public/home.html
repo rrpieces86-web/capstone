@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/public.css' %}">
+{% endblock %}
+
+
+
+{% block content %}
+<div>
+    <h1>Welcome to the Universal Skate Shop</h1>
+</div>
+<div>
+    <section>
+        <div>
+            <img src="{% static 'img/grind action 1.jpg' %}" alt="">
+        </div>
+        <div>
+            Welcome and thanks for visiting us. Welcome to USS! Where we can supply all your needs along your skate boarding journey. Already have a build in mind? Just browsing? Feel free to browse our expansive store, or learn more about us. Feel free to visit our contact page with any questions or suggestion
+        </div>
+    </section>
+</div>
+{% endblock %}

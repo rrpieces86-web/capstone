@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Products
+{% endblock %}
+
+{% block content %}
+    <h1>Products</h1>
+    <ul>
+        {% for items in products %}
+            <li>
+                <h1>title: {{ item.title }}</h1>
+                <p>brand: {{ item.brand }}</p>
+                <a href="#">Continue</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

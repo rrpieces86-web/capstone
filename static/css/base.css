@@ -1,0 +1,10 @@
+nav {
+    background-color: lightgray;
+}
+
+footer{
+    background-color: lightgray;
+    color: black;
+    text-align: center;
+    padding: 12 px 0;
+}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/public.css' %}">
+{% endblock %}
+
+
+
+{% block content %}
+<section>
+    <h1>About Us</h1>
+    <div>
+        <img src="{% static 'img/vert action 1.webp' %}" alt="">
+    </div>
+    <div>
+        <p>In 1995 I first fell in love with skateboarding! Ever since I've always strived in skating with the best gear and representing my favorite brands. In such a small clique it can be hard at times in knowing where to aquire these brands and items. I've always wanted to make a shop where you can grab all your important needs in one shop! Welcome to USS</p>
+    </div>
+</section>
+
+<section>
+    <div>
+        <img src="{% static 'img/baker board classic black and blue.webp' %}" alt="">
+    </div>
+    <div>
+        <h1>Shop all of your favorite brands!</h1>
+    </div>
+</section>
+
+<div>
+    <h1>Our mission</h1>
+    <p>1. To meet every skaters needs</p>
+    <p>2. Here for every request through your skateboarding journey</p>
+</div>
+{% endblock %}
