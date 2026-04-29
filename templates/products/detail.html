@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Product #{{ single_product.id }}
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+    <div>
+        <h1>{{ single_product.title }}</h1>
+        <h3>{{ single_product.category }}</h3>
+        <p>{{ single_product.description }}</p>
+        <span>{{ single_product.brand }}</span>
+        <span>{{ single_product.price }}</span>
+        <span>{{ single_product.quantity }}</span>
+        <a href="{% url 'edit_product' single_product.id %}" class="btn btn-primary">edit</a>
+        <a href="{% url 'delete_product' single_product.id %}" class="btn btn-danger">delete</a>
+    </div>
+{% endblock %}

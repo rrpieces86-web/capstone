@@ -7,11 +7,17 @@
 {% block content %}
     <h1>Products</h1>
     <ul>
-        {% for items in products %}
+        {% for item in products %}
             <li>
+                {% if item.img %}
+                <img src="{{ item.img.url }}" alt="">
+                {% else %}
+                <img src="https://demofree.sirv.com/nope-not-here.jpg" alt="">
+                {% endif %}
+
                 <h1>title: {{ item.title }}</h1>
                 <p>brand: {{ item.brand }}</p>
-                <a href="#">Continue</a>
+                <a href="{% url 'product_detail' item.id %}">Continue</a>
             </li>
         {% endfor %}
     </ul>
