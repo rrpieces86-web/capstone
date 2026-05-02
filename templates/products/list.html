@@ -5,7 +5,28 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Products</h1>
+    <div>
+        {% if selected_category %}
+            <h1>Check our {{ selected_category }}</h1>
+        {% else %}
+
+
+            <h1>Products</h1>
+        {% endif %}
+    </div>
+
+    <div>
+        <form method="get">
+            <label for="categoryfilter">Filter by category</label>
+            <select name="category" class="form-select" id="categoryfilter" style="max-width: 200px;" onchange="this.form.submit()">
+                <option value="">All categories</option>
+                {% for category in categories %}
+                <option value="{{ category.name }}" {% if selected_category == category.name %} selected {% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
     <ul>
         {% for item in products %}
             <li>

@@ -6,7 +6,7 @@ from django.views.generic import (
     CreateView, 
     UpdateView
 )
-from .models import Product
+from .models import Product, Category
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -16,6 +16,22 @@ class ProductListView(ListView):
     template_name = "products/list.html"
     model = Product
     context_object_name = 'products'
+    
+    def get_queryset(self):
+        category = self.request.GET.get("category")
+
+        if not category:
+            return Product.objects.all()
+        else:
+            return Product.objects.filter(category__name__iexact=category)
+        
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        context['selected_category'] = self.request.GET.get('category')
+        return context
 
 class ProductDetailView(DetailView):
     template_name = 'products/detail.html'
