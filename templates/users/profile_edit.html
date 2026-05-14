@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<style>
+  :root {
+    --ink: #1a1a2e; --muted: #6b7280; --accent: #e63946;
+    --border: #e5e7eb; --surface: #f9fafb; --radius: 12px;
+  }
+  .edit-wrap { max-width: 620px; margin: 3rem auto; padding: 0 1.5rem 4rem; }
+  .edit-wrap h1 { font-size: 1.7rem; font-weight: 800; color: var(--ink); margin-bottom: 2rem; letter-spacing: -.03em; }
+  .section-label {
+    font-size: .72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--accent); margin: 1.75rem 0 .75rem;
+  }
+  .form-group { margin-bottom: 1.1rem; }
+  .form-group label {
+    display: block; font-size: .8rem; font-weight: 600; color: var(--ink);
+    margin-bottom: .35rem; text-transform: uppercase; letter-spacing: .05em;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%; padding: .7rem 1rem; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: .95rem; color: var(--ink);
+    transition: border-color .2s; box-sizing: border-box; background: #fff;
+    font-family: inherit;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { outline: none; border-color: var(--accent); }
+  .form-group textarea { min-height: 100px; resize: vertical; }
+  .error { color: var(--accent); font-size: .82rem; margin-top: .3rem; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .actions { display: flex; gap: 1rem; margin-top: 2rem; align-items: center; }
+  .btn-save {
+    padding: .85rem 2.25rem; background: var(--accent); color: #fff;
+    border: none; border-radius: 8px; font-size: 1rem; font-weight: 600;
+    cursor: pointer; transition: opacity .2s;
+  }
+  .btn-save:hover { opacity: .88; }
+  .btn-cancel {
+    color: var(--muted); text-decoration: none; font-size: .95rem; font-weight: 500;
+  }
+  .btn-cancel:hover { color: var(--ink); }
+  .avatar-preview {
+    width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+    border: 2px solid var(--border); margin-bottom: .75rem; display: block;
+  }
+ 
+  /* Django file input reset */
+  input[type="file"] { padding: .4rem .5rem; font-size: .85rem; }
+ 
+  .alert-success {
+    background: #d1fae5; border: 1px solid #6ee7b7; color: #065f46;
+    border-radius: 8px; padding: .85rem 1.25rem; margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  @media (max-width: 520px) { .row-2 { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+ 
+{% block content %}
+<div class="edit-wrap">
+  <h1>Edit Profile</h1>
+ 
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert-success">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+ 
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+ 
+    <div class="section-label">Account Info</div>
+    <div class="row-2">
+      <div class="form-group">
+        <label for="{{ form.first_name.id_for_label }}">First name</label>
+        {{ form.first_name }}
+        {% for error in form.first_name.errors %}<div class="error">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.last_name.id_for_label }}">Last name</label>
+        {{ form.last_name }}
+        {% for error in form.last_name.errors %}<div class="error">{{ error }}</div>{% endfor %}
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="{{ form.email.id_for_label }}">Email</label>
+      {{ form.email }}
+      {% for error in form.email.errors %}<div class="error">{{ error }}</div>{% endfor %}
+    </div>
+ 
+    <div class="section-label">Profile Details</div>
+ 
+    <div class="form-group">
+      <label>Profile Photo</label>
+      {% if form.instance.avatar.name %}
+        <img src="{{ form.instance.avatar.url }}" class="avatar-preview" alt="Current avatar">
+      {% endif %}
+      <input type="file" name="avatar" accept="image/*">
+    </div>
+ 
+    <div class="form-group">
+      <label for="{{ form.bio.id_for_label }}">Bio</label>
+      {{ form.bio }}
+      {% for error in form.bio.errors %}<div class="error">{{ error }}</div>{% endfor %}
+    </div>
+ 
+    <div class="row-2">
+      <div class="form-group">
+        <label for="{{ form.phone.id_for_label }}">Phone</label>
+        {{ form.phone }}
+        {% for error in form.phone.errors %}<div class="error">{{ error }}</div>{% endfor %}
+      </div>
+      <div class="form-group">
+        <label for="{{ form.address.id_for_label }}">Address</label>
+        {{ form.address }}
+        {% for error in form.address.errors %}<div class="error">{{ error }}</div>{% endfor %}
+      </div>
+    </div>
+ 
+    <div class="actions">
+      <button type="submit" class="btn-save">Save Changes</button>
+      <a href="{% url 'profile' %}" class="btn-cancel">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

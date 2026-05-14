@@ -35,10 +35,24 @@
                 {% else %}
                 <img src="https://demofree.sirv.com/nope-not-here.jpg" alt="">
                 {% endif %}
+                <div>
+                    <p>
 
-                <h1>title: {{ item.title }}</h1>
-                <p>brand: {{ item.brand }}</p>
-                <a href="{% url 'product_detail' item.id %}">Continue</a>
+                        <h1>title: {{ item.title }}</h1>
+                        <p>brand: {{ item.brand }}</p>
+                        <a href="{% url 'product_detail' item.id %}">Continue</a>
+                    </p>
+                    <form method="POST" action="{% url 'cart_add' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ item.id }}">
+                        <label>quantity</label>
+                        <input type="number" min="1" max="10" name="quantity" value="1">
+                        <button>add to cart</button>
+
+                    </form>
+
+                    
+                </div>
             </li>
         {% endfor %}
     </ul>

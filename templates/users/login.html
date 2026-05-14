@@ -15,5 +15,13 @@
 
         <button class="btn btn-primary">Login</button>
     </form>
+
+    <p style="margin-top: 1rem;">
+        <a href="{% url 'password_reset' %}">Forgot your password?</a>
+    </p>
+    <p>
+        Don't have an account? <a href="{% url 'Signup' %}">Sign up right now!!</a>
+    </p>
 </div>
+
 {% endblock %}

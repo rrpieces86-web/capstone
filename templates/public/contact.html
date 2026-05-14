@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/public.css' %}">
+{% endblock %}
+
+
+
+{% block content %}
+<h1>Contact Us</h1>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<form class="container border p-5 bg-light mt-5" method="POST">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Personal Information</legend>
+        <div class="mb-3">
+            <label class="form-label">Name:</label>
+            <input class="form-control" type="text" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email:</label>
+            <input class="form-control" type="email" name="email" required>
+        </div>
+        <div mb-3>
+            <label class="form-label">Phone:</label>
+            <input class="form-control" type="tel" name="phone">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Message:</label>
+            <textarea class="form-control" name="message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mb-3">submit</button>
+    </fieldset>
+</form>
+
+
+{% endblock %}
