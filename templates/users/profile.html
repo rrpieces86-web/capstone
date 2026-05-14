@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --muted: #6b7280;
+    --accent: #e63946;
+    --surface: #f9fafb;
+    --border: #e5e7eb;
+    --radius: 14px;
+  }
+  .profile-wrap {
+    max-width: 680px;
+    margin: 3rem auto;
+    padding: 0 1.5rem 4rem;
+  }
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    margin-bottom: 2rem;
+  }
+  .avatar-ring {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+    color: var(--muted);
+  }
+  .avatar-ring img { width: 100%; height: 100%; object-fit: cover; }
+  .profile-name h1 {
+    font-size: 1.7rem; font-weight: 800; color: var(--ink); margin: 0 0 .2rem; letter-spacing: -.03em;
+  }
+  .profile-name .username { color: var(--muted); font-size: .9rem; }
+  .card {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.75rem; margin-bottom: 1.25rem;
+  }
+  .card-title {
+    font-size: .75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; color: var(--accent); margin-bottom: 1rem;
+  }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+  .info-item label {
+    display: block; font-size: .75rem; color: var(--muted); font-weight: 600;
+    text-transform: uppercase; letter-spacing: .06em; margin-bottom: .2rem;
+  }
+  .info-item span { font-size: .95rem; color: var(--ink); }
+  .bio-text { color: var(--ink); line-height: 1.7; font-size: .95rem; }
+  .empty { color: var(--muted); font-style: italic; }
+  .edit-btn {
+    display: inline-block; margin-top: 1.5rem;
+    padding: .75rem 2rem; background: var(--accent); color: #fff;
+    border-radius: 8px; text-decoration: none; font-weight: 600; font-size: .95rem;
+    transition: opacity .2s;
+  }
+  .edit-btn:hover { opacity: .88; }
+  @media (max-width: 520px) {
+    .info-grid { grid-template-columns: 1fr; }
+    .profile-header { flex-direction: column; text-align: center; }
+  }
+</style>
+{% endblock %}
+ 
+{% block content %}
+<div class="profile-wrap">
+ 
+  <div class="profile-header">
+    <div class="avatar-ring">
+      {% if profile.avatar %}
+        <img src="{{ profile.avatar.url }}" alt="Avatar">
+      {% else %}
+        👤
+      {% endif %}
+    </div>
+    <div class="profile-name">
+      <h1>{{ profile.full_name }}</h1>
+      <span class="username">@{{ profile.user.username }}</span>
+    </div>
+  </div>
+ 
+  {% if profile.bio %}
+  <div class="card">
+    <div class="card-title">About</div>
+    <p class="bio-text">{{ profile.bio }}</p>
+  </div>
+  {% endif %}
+ 
+  <div class="card">
+    <div class="card-title">Contact Info</div>
+    <div class="info-grid">
+      <div class="info-item">
+        <label>Email</label>
+        <span>{% if profile.user.email %}{{ profile.user.email }}{% else %}<em class="empty">Not set</em>{% endif %}</span>
+      </div>
+      <div class="info-item">
+        <label>Phone</label>
+        <span>{% if profile.phone %}{{ profile.phone }}{% else %}<em class="empty">Not set</em>{% endif %}</span>
+      </div>
+      <div class="info-item" style="grid-column: span 2;">
+        <label>Address</label>
+        <span>{% if profile.address %}{{ profile.address }}{% else %}<em class="empty">Not set</em>{% endif %}</span>
+      </div>
+    </div>
+  </div>
+ 
+  <a href="{% url 'profile_edit' %}" class="edit-btn">Edit Profile</a>
+</div>
+{% endblock %}
