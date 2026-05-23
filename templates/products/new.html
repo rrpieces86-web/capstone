@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
-
-{% block title %}
-    New product
+{% load static %}
+{% block title %}New Product{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/public.css' %}">
 {% endblock %}
-
+ 
 {% block content %}
-
-    <div>
-        <h1>Store new Product</h1>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Create" class="btn btn-success">
-        </form>
-    </div>
+<div class="product-form-wrap">
+  <h1>Add New Product</h1>
+  <p class="form-subtitle">Fill out the details below to add a new item to the store.</p>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Create Product">
+  </form>
+</div>
 {% endblock %}
+ 

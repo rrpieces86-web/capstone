@@ -1,136 +1,171 @@
-Checkout · HTML
-Copy
-
 {% extends 'base.html' %}
 {% load static %}
- 
+
 {% block title %}Checkout{% endblock %}
- 
+
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+<style>
+  /* Stripe Element container */
+  #payment-element {
+    margin: 1.25rem 0;
+  }
+  #payment-message {
+    color: #c0392b;
+    font-size: .9rem;
+    margin-top: .75rem;
+    display: none;
+  }
+  #submit-btn {
+    width: 100%;
+    padding: .85rem;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  #submit-btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+  }
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    margin-right: .5rem;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
 {% endblock %}
- 
+
 {% block content %}
 <div class="container mt-5 checkout">
-    <h1>Checkout</h1>
- 
-    <div class="checkout-layout">
- 
-        {# Order Summary #}
-        <div class="order-summary">
-            <h2>Order Summary</h2>
-            {% for item in items %}
-            <div class="summary-item">
-                <span>{{ item.product.title }} × {{ item.quantity }}</span>
-                <span>${{ item.product.price }}</span>
-            </div>
-            {% endfor %}
-            <hr>
-            <div class="summary-total">
-                <strong>Total</strong>
-                <strong>${{ order.total }}</strong>
-            </div>
-        </div>
- 
-        {# Payment Form #}
-        <div class="payment-form">
-            <h2>Select Payment Method</h2>
-            <form method="POST" action="{% url 'checkout' %}">
-                {% csrf_token %}
- 
-                <div class="payment-options">
- 
-                    <label class="payment-option">
-                        <input type="radio" name="payment_method" value="cash" required>
-                        <span class="payment-label">
-                            <span class="payment-icon">💵</span>
-                            Cash
-                        </span>
-                    </label>
- 
-                    <label class="payment-option">
-                        <input type="radio" name="payment_method" value="credit_card">
-                        <span class="payment-label">
-                            <span class="payment-icon">💳</span>
-                            Credit Card
-                        </span>
-                    </label>
- 
-                    <label class="payment-option">
-                        <input type="radio" name="payment_method" value="debit_card">
-                        <span class="payment-label">
-                            <span class="payment-icon">🏦</span>
-                            Debit Card
-                        </span>
-                    </label>
- 
-                    <label class="payment-option">
-                        <input type="radio" name="payment_method" value="paypal">
-                        <span class="payment-label">
-                            <span class="payment-icon">🅿️</span>
-                            PayPal
-                        </span>
-                    </label>
- 
-                    <label class="payment-option">
-                        <input type="radio" name="payment_method" value="cashapp">
-                        <span class="payment-label">
-                            <span class="payment-icon">💸</span>
-                            Cash App
-                        </span>
-                    </label>
- 
-                </div>
- 
-                {# Card details — shown/hidden by JS #}
-                <div id="card-fields" class="card-fields" style="display:none;">
-                    <h3>Card Details</h3>
-                    <input type="text" placeholder="Cardholder Name" maxlength="100">
-                    <input type="text" placeholder="Card Number" maxlength="19" id="card-number">
-                    <div class="card-row">
-                        <input type="text" placeholder="MM/YY" maxlength="5">
-                        <input type="text" placeholder="CVV" maxlength="4">
-                    </div>
-                    <p class="card-note">⚠️ This is a demo — do not enter real card details.</p>
-                </div>
- 
-                <div id="paypal-info" class="payment-info-box" style="display:none;">
-                    <p>You'll be redirected to PayPal to complete your payment.</p>
-                </div>
- 
-                <div id="cashapp-info" class="payment-info-box" style="display:none;">
-                    <p>Send ${{ order.total }} to <strong>$YourCashTag</strong> and include your order number.</p>
-                </div>
- 
-                <div id="cash-info" class="payment-info-box" style="display:none;">
-                    <p>Pay with cash upon pickup or delivery.</p>
-                </div>
- 
-                <button type="submit" class="btn-place-order">Place Order</button>
-            </form>
-        </div>
- 
+  <h1>Checkout</h1>
+
+  <div class="checkout-layout">
+
+    {# ── Order Summary ── #}
+    <div class="order-summary">
+      <h2>Order Summary</h2>
+      {% for item in items %}
+      <div class="summary-item">
+        <span>{{ item.product.title }} × {{ item.quantity }}</span>
+        <span>${{ item.product.price }}</span>
+      </div>
+      {% endfor %}
+      <hr>
+      <div class="summary-total">
+        <strong>Total</strong>
+        <strong>${{ order.total }}</strong>
+      </div>
     </div>
+
+    {# ── Stripe Payment Form ── #}
+    <div class="payment-form">
+      <h2>Pay with Card</h2>
+      <p style="color:#6b7280; font-size:.9rem;">
+        Secured by <strong>Stripe</strong> — your card details never touch our server.
+      </p>
+
+      <form id="payment-form">
+        {% csrf_token %}
+
+        {# Stripe mounts its card UI here #}
+        <div id="payment-element"></div>
+
+        <div id="payment-message"></div>
+
+        <button id="submit-btn" type="submit">
+          <span id="btn-text">Pay ${{ order.total }}</span>
+        </button>
+      </form>
+    </div>
+
+  </div>
 </div>
 {% endblock %}
- 
+
 {% block js %}
+{# Load Stripe.js from Stripe's CDN — never self-host this #}
+<script src="https://js.stripe.com/v3/"></script>
 <script>
-    const radios = document.querySelectorAll('input[name="payment_method"]');
-    const cardFields = document.getElementById('card-fields');
-    const paypalInfo = document.getElementById('paypal-info');
-    const cashappInfo = document.getElementById('cashapp-info');
-    const cashInfo = document.getElementById('cash-info');
- 
-    function updatePaymentUI(value) {
-        cardFields.style.display = (value === 'credit_card' || value === 'debit_card') ? 'block' : 'none';
-        paypalInfo.style.display = (value === 'paypal') ? 'block' : 'none';
-        cashappInfo.style.display = (value === 'cashapp') ? 'block' : 'none';
-        cashInfo.style.display = (value === 'cash') ? 'block' : 'none';
-    }
- 
-    radios.forEach(radio => {
-        radio.addEventListener('change', () => updatePaymentUI(radio.value));
+  const stripe = Stripe("{{ stripe_public_key }}");
+
+  // Initialize Stripe Elements using the PaymentIntent client secret
+  const elements = stripe.elements({ clientSecret: "{{ client_secret }}" });
+
+  // Mount the unified Payment Element (handles cards, Apple Pay, etc.)
+  const paymentElement = elements.create("payment");
+  paymentElement.mount("#payment-element");
+
+  const form        = document.getElementById("payment-form");
+  const submitBtn   = document.getElementById("submit-btn");
+  const btnText     = document.getElementById("btn-text");
+  const msgBox      = document.getElementById("payment-message");
+
+  function showMessage(text) {
+    msgBox.textContent = text;
+    msgBox.style.display = "block";
+    setTimeout(() => { msgBox.style.display = "none"; }, 6000);
+  }
+
+  function setLoading(loading) {
+    submitBtn.disabled = loading;
+    btnText.innerHTML = loading
+      ? '<span class="spinner"></span> Processing…'
+      : "Pay ${{ order.total }}";
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // 1. Confirm the payment with Stripe
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      redirect: "if_required",   // stay on page for card payments
     });
+
+    if (error) {
+      // Card declined, validation errors, etc.
+      showMessage(error.message);
+      setLoading(false);
+      return;
+    }
+
+    if (paymentIntent && paymentIntent.status === "succeeded") {
+      // 2. Tell our server the payment succeeded so it can mark the order paid
+      const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+      const res = await fetch("{% url 'payment_success' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ payment_intent_id: paymentIntent.id }),
+      });
+
+      const data = await res.json();
+
+      if (data.redirect) {
+        window.location.href = data.redirect;
+      } else {
+        showMessage(data.error || "Something went wrong. Please contact support.");
+        setLoading(false);
+      }
+    } else {
+      showMessage("Unexpected payment status. Please try again.");
+      setLoading(false);
+    }
+  });
 </script>
 {% endblock %}

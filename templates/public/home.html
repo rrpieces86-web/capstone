@@ -1,24 +1,59 @@
 {% extends 'base.html' %}
-
 {% load static %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/public.css' %}">
 {% endblock %}
-
-
-
+ 
 {% block content %}
-<div>
-    <h1>Welcome to the Universal Skate Shop</h1>
+ 
+<!-- Hero -->
+<div class="page-hero">
+  <h1>Universal Skate Shop</h1>
+  <p class="hero-sub">Where every skater's journey begins</p>
 </div>
-<div>
-    <section>
-        <div>
-            <img src="{% static 'img/grind action 1.jpg' %}" alt="">
-        </div>
-        <div>
-            Welcome and thanks for visiting us. Welcome to USS! Where we can supply all your needs along your skate boarding journey. Already have a build in mind? Just browsing? Feel free to browse our expansive store, or learn more about us. Feel free to visit our contact page with any questions or suggestion
-        </div>
-    </section>
+ 
+<!-- Section 1: Welcome -->
+<section class="article-section">
+  <img class="section-img" src="{% static 'img/grind action 1.jpg' %}" alt="Skater grinding">
+  <div class="section-text">
+    <span class="section-tag">Welcome</span>
+    <h2>Built for Skaters, by Skaters</h2>
+    <p>Welcome to USS — where we supply everything you need along your skateboarding journey. Already have a build in mind? Just browsing? Feel free to explore our expansive store or learn more about who we are.</p>
+    <p>Have questions or suggestions? Visit our contact page — we're always here to help.</p>
+    <a href="{% url 'product_list' %}" class="btn-uss">Shop Now</a>
+  </div>
+</section>
+ 
+<!-- Section 2: Guarantees -->
+<section class="article-section reverse">
+  <div class="section-text">
+    <span class="section-tag">Our Promise</span>
+    <h2>Satisfaction Guaranteed</h2>
+    <ul>
+      <li>Full access to the park with our year pass</li>
+      <li>Complete access to rental equipment and accessories</li>
+      <li>Full staff of professionals dedicated to your goals</li>
+      <li>Access to award-winning parks</li>
+    </ul>
+    <a href="{% url 'service_list' %}" class="btn-uss-outline btn-uss">View Services</a>
+  </div>
+  <img class="section-img" src="{% static 'img/vert action 2.webp' %}" alt="Vert skating">
+</section>
+ 
+<!-- Testimonials dark band -->
+<div class="dark-band">
+  <h2>What Our Riders Say</h2>
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <p>One of the best experiences at a park that I could've imagined</p>
+    </div>
+    <div class="testimonial-card">
+      <p>Very helpful staff that could show me everything I needed and how to get it</p>
+    </div>
+    <div class="testimonial-card">
+      <p>10 out of 10 — seriously!</p>
+    </div>
+  </div>
 </div>
+ 
 {% endblock %}

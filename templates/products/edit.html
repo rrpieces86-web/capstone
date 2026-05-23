@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}
     Edit Product
 {% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/public.css' %}">
+{% endblock %}
 
 {% block content %}
-    <div>
-        <h1>Edit Post</h1>
+    <div class="product-form-wrap">
+        <h1>Edit Product</h1>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}

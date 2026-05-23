@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/public.css' %}">
+<link rel="stylesheet" href="{% static 'css/list.css' %}">
+{% endblock %}
+ 
+{% block content %}
+ 
+<div class="page-hero">
+  <h1>Services</h1>
+  <p class="hero-sub">Expert help for every stage of your skateboarding journey</p>
+</div>
+ 
+<!-- Intro section -->
+<section class="article-section" style="border-bottom: 1px solid var(--clr-border);">
+  <img class="section-img" src="{% static 'img/kickflip1.jpg' %}" alt="Skater kickflipping">
+  <div class="section-text">
+    <span class="section-tag">About Our Services</span>
+    <h2>Here for Every Step</h2>
+    <p>Along with all your skateboarding equipment needs, we are always here to assist you in any way we can. As skateboarding enthusiasts, we're always excited to meet people and help further the love of the sport.</p>
+    <p>Below you'll find services specifically tailored to your needs.</p>
+  </div>
+</section>
+ 
+<!-- Services grid -->
+<div class="catalog-wrap" style="margin-top: 2.5rem;">
+  <div class="product-grid">
+    {% for item in services %}
+    <div class="product-card service-card">
+      <div class="card-img-wrap">
+        {% if item.img %}
+          <img src="{{ item.img.url }}" alt="{{ item.title }}">
+        {% else %}
+          <img src="https://demofree.sirv.com/nope-not-here.jpg" alt="No image">
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <div class="card-title">{{ item.title }}</div>
+        <div class="card-desc">{{ item.description }}</div>
+      </div>
+      <div class="card-actions">
+        <a href="{% url 'service_detail' item.id %}" class="btn-detail">Learn More</a>
+        <form method="POST" action="{% url 'cart_add' %}" class="add-to-cart">
+          {% csrf_token %}
+          <input type="hidden" name="service_id" value="{{ item.id }}">
+          <input type="number" min="1" max="10" name="quantity" value="1">
+          <button type="submit">Add to Cart</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+ 
+{% endblock %}

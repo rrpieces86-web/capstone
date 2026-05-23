@@ -1,59 +1,61 @@
 {% extends 'base.html' %}
-
-{% block title %}
-    Products
+{% load static %}
+{% block title %}Products{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/public.css' %}">
+<link rel="stylesheet" href="{% static 'css/list.css' %}">
 {% endblock %}
-
+ 
 {% block content %}
-    <div>
-        {% if selected_category %}
-            <h1>Check our {{ selected_category }}</h1>
-        {% else %}
-
-
-            <h1>Products</h1>
-        {% endif %}
-    </div>
-
-    <div>
-        <form method="get">
-            <label for="categoryfilter">Filter by category</label>
-            <select name="category" class="form-select" id="categoryfilter" style="max-width: 200px;" onchange="this.form.submit()">
-                <option value="">All categories</option>
-                {% for category in categories %}
-                <option value="{{ category.name }}" {% if selected_category == category.name %} selected {% endif %}>{{ category.name }}</option>
-                {% endfor %}
-            </select>
-        </form>
-    </div>
-
-    <ul>
-        {% for item in products %}
-            <li>
-                {% if item.img %}
-                <img src="{{ item.img.url }}" alt="">
-                {% else %}
-                <img src="https://demofree.sirv.com/nope-not-here.jpg" alt="">
-                {% endif %}
-                <div>
-                    <p>
-
-                        <h1>title: {{ item.title }}</h1>
-                        <p>brand: {{ item.brand }}</p>
-                        <a href="{% url 'product_detail' item.id %}">Continue</a>
-                    </p>
-                    <form method="POST" action="{% url 'cart_add' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{ item.id }}">
-                        <label>quantity</label>
-                        <input type="number" min="1" max="10" name="quantity" value="1">
-                        <button>add to cart</button>
-
-                    </form>
-
-                    
-                </div>
-            </li>
+ 
+<div class="page-hero">
+  <h1>{% if selected_category %}{{ selected_category }}{% else %}Products{% endif %}</h1>
+  <p class="hero-sub">Decks, trucks, wheels and everything in between</p>
+</div>
+ 
+<div class="catalog-wrap" style="margin-top: 2.5rem;">
+ 
+  <!-- Filter -->
+  <div class="catalog-filter">
+    <label for="categoryfilter">Filter by category</label>
+    <form method="get">
+      <select name="category" id="categoryfilter" onchange="this.form.submit()">
+        <option value="">All categories</option>
+        {% for category in categories %}
+        <option value="{{ category.name }}" {% if selected_category == category.name %}selected{% endif %}>{{ category.name }}</option>
         {% endfor %}
-    </ul>
+      </select>
+    </form>
+  </div>
+ 
+  <!-- Grid -->
+  <div class="product-grid">
+    {% for item in products %}
+    <div class="product-card">
+      <div class="card-img-wrap">
+        {% if item.img %}
+          <img src="{{ item.img.url }}" alt="{{ item.title }}">
+        {% else %}
+          <img src="https://demofree.sirv.com/nope-not-here.jpg" alt="No image">
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <div class="card-title">{{ item.title }}</div>
+        <div class="card-brand">{{ item.brand }}</div>
+        {% if item.price %}<div class="card-price">${{ item.price }}</div>{% endif %}
+      </div>
+      <div class="card-actions">
+        <a href="{% url 'product_detail' item.id %}" class="btn-detail">View Details</a>
+        <form method="POST" action="{% url 'cart_add' %}" class="add-to-cart">
+          {% csrf_token %}
+          <input type="hidden" name="product_id" value="{{ item.id }}">
+          <input type="number" min="1" max="10" name="quantity" value="1">
+          <button type="submit">Add to Cart</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+ 
+</div>
 {% endblock %}

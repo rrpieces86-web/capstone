@@ -1,44 +1,53 @@
 {% extends 'base.html' %}
-
 {% load static %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/public.css' %}">
 {% endblock %}
-
-
-
+ 
 {% block content %}
-<h1>Contact Us</h1>
-
+ 
+<div class="page-hero">
+  <h1>Contact Us</h1>
+  <p class="hero-sub">Questions, suggestions, or just want to talk skating — we're here</p>
+</div>
+ 
 {% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+  {% for message in messages %}
+    <div class="alert-success" style="width:min(740px,92%); margin: 1.5rem auto 0;">{{ message }}</div>
+  {% endfor %}
 {% endif %}
-
-<form class="container border p-5 bg-light mt-5" method="POST">
+ 
+<div class="contact-wrap" style="margin-top: 3rem;">
+  <form class="contact-form" method="POST">
     {% csrf_token %}
     <fieldset>
-        <legend>Personal Information</legend>
-        <div class="mb-3">
-            <label class="form-label">Name:</label>
-            <input class="form-control" type="text" name="name" required>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Email:</label>
-            <input class="form-control" type="email" name="email" required>
-        </div>
-        <div mb-3>
-            <label class="form-label">Phone:</label>
-            <input class="form-control" type="tel" name="phone">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Message:</label>
-            <textarea class="form-control" name="message" rows="5" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary mb-3">submit</button>
+      <legend>Send Us a Message</legend>
+ 
+      <div class="field-group" style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.35rem;">
+        <label style="display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-family:var(--font-body);color:var(--clr-dark);">Name</label>
+        <input type="text" name="name" placeholder="Your name" required>
+      </div>
+ 
+      <div class="field-group" style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.35rem;">
+        <label style="display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-family:var(--font-body);color:var(--clr-dark);">Email</label>
+        <input type="email" name="email" placeholder="you@example.com" required>
+      </div>
+ 
+      <div class="field-group" style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.35rem;">
+        <label style="display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-family:var(--font-body);color:var(--clr-dark);">
+          Phone <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--clr-muted);">(optional)</span>
+        </label>
+        <input type="tel" name="phone" placeholder="+1 (555) 000-0000">
+      </div>
+ 
+      <div class="field-group" style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.35rem;">
+        <label style="display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-family:var(--font-body);color:var(--clr-dark);">Message</label>
+        <textarea name="message" rows="5" placeholder="How can we help you?" required></textarea>
+      </div>
+ 
+      <button type="submit" class="btn-send">Send Message</button>
     </fieldset>
-</form>
-
-
+  </form>
+</div>
+ 
 {% endblock %}

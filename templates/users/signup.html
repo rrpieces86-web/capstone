@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
-
 {% load static %}
 {% block css %}{% endblock %}
-
+ 
 {% block content %}
-<div>
-
-    <h1>Create a new account</h1>
-
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1>Create Account</h1>
+    <p class="subtitle">Join USS and get access to our full catalog of skate gear and services.</p>
+ 
     <form method="post">
-        {% csrf_token %}
-
-        {{ form.as_p }}
-
-        <button class="btn btn-primary">Signup</button>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn-submit">Sign Up</button>
     </form>
+ 
+    <div class="auth-links">
+      <p>Already have an account? <a href="{% url 'Login' %}">Log in</a></p>
+    </div>
+  </div>
 </div>
 {% endblock %}

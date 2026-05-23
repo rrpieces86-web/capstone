@@ -18,4 +18,11 @@ urlpatterns = [
     path("cart/remove/<int:item_id>/", views.remove_from_cart, name="cart_remove"),
     path("checkout/", views.checkout, name="checkout"),
     path("order/confirmation/", views.order_confirmation, name="order_confirmation"),
+    # Stripe checkout
+    path("checkout/", views.checkout, name="checkout"),
+    path("payment/success/", views.payment_success, name="payment_success"),
+    path("order/confirmation/", views.order_confirmation, name="order_confirmation"),
+ 
+    # Stripe webhook (add to config/urls.py instead if you prefer a top-level path)
+    path("stripe/webhook/", views.stripe_webhook, name="stripe_webhook"),
 ]

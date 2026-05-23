@@ -1,18 +1,17 @@
 {% extends 'base.html' %}
- 
-{% block title %}Order Confirmed!{% endblock %}
+{% load static %}
+{% block title %}Order Confirmed{% endblock %}
+{% block css %}{% endblock %}
  
 {% block content %}
-<div class="container mt-5" style="text-align:center; padding: 60px 20px;">
-    <div style="font-size: 4rem;">✅</div>
-    <h1>Order Confirmed!</h1>
-    <p>Thank you for your purchase, <strong>{{ request.user.username }}</strong>!</p>
-    {% if order %}
-        <p>Order total: <strong>${{ order.total }}</strong></p>
-        <p>Placed at: {{ order.paid_at|date:"F j, Y, g:i a" }}</p>
-    {% endif %}
-    <a href="{% url 'product_list' %}" class="btn-checkout" style="display:inline-block; margin-top:20px;">
-        Continue Shopping
-    </a>
+<div class="order-confirm">
+  <div class="confirm-icon">✅</div>
+  <h1>Order Confirmed!</h1>
+  <p style="margin:.6rem 0;">Thank you for your purchase, <strong>{{ request.user.username }}</strong>!</p>
+  {% if order %}
+    <p>Order total: <strong>${{ order.total }}</strong></p>
+    <p style="margin-top:.4rem;font-size:.88rem;color:var(--clr-muted);">Placed {{ order.paid_at|date:"F j, Y, g:i a" }}</p>
+  {% endif %}
+  <a href="{% url 'product_list' %}" class="btn-uss" style="margin-top:2rem;display:inline-block;">Continue Shopping</a>
 </div>
 {% endblock %}
