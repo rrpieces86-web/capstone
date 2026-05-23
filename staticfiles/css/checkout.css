@@ -1,0 +1,171 @@
+.checkout { padding-bottom: 5rem; }
+ 
+.checkout h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  color: var(--clr-dark);
+  margin-bottom: 2rem;
+}
+ 
+.checkout-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+ 
+@media (max-width: 700px) {
+  .checkout-layout { grid-template-columns: 1fr; }
+}
+ 
+/* Order Summary */
+.order-summary {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+}
+ 
+.order-summary h2 {
+  font-size: 1.2rem;
+  color: var(--clr-dark);
+  border-bottom: 1px solid var(--clr-border);
+  padding-bottom: .85rem;
+  margin-bottom: 1.1rem;
+}
+ 
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  padding: .6rem 0;
+  font-size: .92rem;
+  font-family: var(--font-body);
+  color: var(--clr-mid);
+  border-bottom: 1px solid var(--clr-surface-alt);
+}
+ 
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: .9rem;
+  font-size: 1.05rem;
+  font-family: var(--font-body);
+  color: var(--clr-dark);
+}
+ 
+/* Payment Form */
+.payment-form {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+}
+ 
+.payment-form h2 {
+  font-size: 1.2rem;
+  color: var(--clr-dark);
+  border-bottom: 1px solid var(--clr-border);
+  padding-bottom: .85rem;
+  margin-bottom: 1.25rem;
+}
+ 
+/* Stripe element container */
+#payment-element { margin: 1.25rem 0; }
+ 
+#payment-message {
+  color: var(--clr-primary);
+  font-size: .88rem;
+  font-family: var(--font-body);
+  margin-top: .75rem;
+  display: none;
+}
+ 
+#submit-btn {
+  width: 100%;
+  padding: .88rem;
+  background: var(--clr-primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: .08em;
+  cursor: pointer;
+  transition: background .2s, opacity .2s;
+}
+ 
+#submit-btn:hover { background: var(--clr-primary-dk); }
+ 
+#submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+ 
+.spinner {
+  display: inline-block;
+  width: 15px; height: 15px;
+  border: 2px solid rgba(255,255,255,.5);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  margin-right: .45rem;
+  vertical-align: middle;
+}
+ 
+@keyframes spin { to { transform: rotate(360deg); } }
+ 
+/* Checkout reused on cart page */
+.btn-checkout {
+  display: inline-block;
+  background: var(--clr-primary);
+  color: var(--clr-white) !important;
+  padding: .75rem 2rem;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: .07em;
+  text-decoration: none;
+  margin-top: 1rem;
+  transition: background .2s;
+}
+ 
+.btn-checkout:hover { background: var(--clr-primary-dk); }
+ 
+/* ============================================================
+   RESPONSIVE — checkout.css
+   ============================================================ */
+ 
+/* ── Phone (≤ 480px) ── */
+@media (max-width: 480px) {
+  .checkout { padding-bottom: 3rem; }
+  .checkout h1 { font-size: 1.8rem; margin-bottom: 1.25rem; }
+  .checkout-layout { grid-template-columns: 1fr; gap: 1.25rem; }
+  .order-summary, .payment-form { padding: 1.25rem; }
+  .order-summary h2, .payment-form h2 { font-size: 1rem; }
+  .summary-item { font-size: .85rem; }
+  .summary-total { font-size: .95rem; }
+  #submit-btn { font-size: 1rem; padding: .8rem; }
+  .btn-checkout { width: 100%; text-align: center; padding: .75rem; }
+}
+ 
+/* ── Tablet (641px – 1023px) ── */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .checkout-layout { grid-template-columns: 1fr 1.2fr; gap: 1.75rem; }
+}
+ 
+/* ── Wide / TV (1600px+) ── */
+@media (min-width: 1600px) {
+  .checkout h1 { font-size: 3rem; margin-bottom: 2.5rem; }
+  .checkout-layout { gap: 3.5rem; }
+  .order-summary, .payment-form { padding: 2.25rem; }
+  .order-summary h2, .payment-form h2 { font-size: 1.3rem; }
+  .summary-item { font-size: 1rem; padding: .75rem 0; }
+  .summary-total { font-size: 1.2rem; }
+  #submit-btn { font-size: 1.15rem; padding: 1rem; }
+}
+ 
+/* ── Ultra-wide / 4K (1920px+) ── */
+@media (min-width: 1920px) {
+  .checkout-layout { gap: 5rem; }
+  .order-summary, .payment-form { padding: 2.75rem; }
+  .summary-item { font-size: 1.05rem; }
+  #submit-btn { font-size: 1.2rem; }
+}

@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}
-    New product
+    New Service
+{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/public.css' %}">
 {% endblock %}
 
 {% block content %}
 
-    <div>
+    <div class="product-form-wrap">
         <h1>Add new service</h1>
+        <p class="form-subtitle">Fill out the details below to add a new service to the store.</p>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
