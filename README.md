@@ -1,2 +1,19 @@
-"# capstone" 
- log into 
+asgiref==3.11.1
+certifi==2026.4.22
+charset-normalizer==3.4.7
+dj-database-url==3.1.2
+Django==6.0.4
+django-env==0.2.1
+django-environ==0.13.0
+gunicorn==26.0.0
+idna==3.15
+packaging==26.2
+pillow==12.2.0
+psycopg2-binary==2.9.12
+requests==2.34.1
+sqlparse==0.5.5
+stripe==15.1.0
+typing_extensions==4.15.0
+tzdata==2026.1
+urllib3==2.7.0
+whitenoise==6.12.0
