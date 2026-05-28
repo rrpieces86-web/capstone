@@ -19,7 +19,7 @@ urlpatterns = [
         PasswordResetView.as_view(
             template_name="users/password_reset.html",
             email_template_name="users/password_reset_email.txt",
-            subject_template_name="users/password_reset_subjecct.txt",
+            subject_template_name="users/password_reset_subject.txt",
             success_url="/users/password-reset/done/",
         ),
         name="password_reset",
