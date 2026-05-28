@@ -56,7 +56,17 @@ INSTALLED_APPS = [
     'products',
     'users',
     'services',
+    'cloudinary',
+    'cloudinary_storage',
 ]
+
+import cloudinary
+
+cloudinary.config(
+    cloud_name=env('CLOUDINARY_CLOUD_NAME'),
+    api_key=env('CLOUDINARY_API_KEY'),
+    api_secret=env('CLOUDINARY_API_SECRET'),
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -170,7 +180,7 @@ STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET')
 
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
