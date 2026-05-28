@@ -1,3 +1,6 @@
+
+raw
+Base · HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,89 +23,269 @@
 
     <a class="navbar-brand" href="{% url 'home' %}">USS</a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    {# ── Custom hamburger button — works without Bootstrap JS collapse ── #}
+    <button class="uss-toggler" id="ussToggler" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
     </button>
 
+    {# ── Desktop nav (unchanged, hidden on mobile) ── #}
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-      {# ── Left-side nav links ── #}
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'about' %}">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'contact' %}">Contact</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'product_list' %}">Products</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'service_list' %}">Services</a>
-        </li>
-
+        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'product_list' %}">Products</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'service_list' %}">Services</a></li>
         {% if user.is_staff %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'new_product' %}">Add Products</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'new_service' %}">Add A Service</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-        </li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'new_product' %}">Add Products</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'new_service' %}">Add A Service</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">Admin</a></li>
         {% endif %}
-
       </ul>
-
-      {# ── Right-side: auth links ── #}
       <ul class="navbar-nav mb-2 mb-lg-0">
-
         {% if user.is_authenticated %}
-
+          <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">👤 {{ user.username }}</a></li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'profile' %}">
-              👤 {{ user.username }}
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'cart' %}">
-              🛒
+            <a class="nav-link" href="{% url 'cart' %}">🛒
               {% if cart_item_count and cart_item_count > 0 %}
                 <span class="badge text-bg-danger rounded-pill">{{ cart_item_count }}</span>
               {% endif %}
             </a>
           </li>
-
           <li class="nav-item">
             <form method="post" action="{% url 'logout' %}" class="d-inline">
               {% csrf_token %}
               <button type="submit" class="btn btn-link nav-link p-0 px-2">Logout</button>
             </form>
           </li>
-
         {% else %}
-
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'Login' %}">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'Signup' %}">Sign Up</a>
-          </li>
-
+          <li class="nav-item"><a class="nav-link" href="{% url 'Login' %}">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'Signup' %}">Sign Up</a></li>
         {% endif %}
-
       </ul>
-
     </div>
+
   </div>
 </nav>
+
+{# ── Mobile drawer — completely separate from Bootstrap collapse ── #}
+<div class="uss-mobile-menu" id="ussMobileMenu" aria-hidden="true">
+  <div class="uss-mobile-inner">
+
+    <div class="uss-mobile-section">
+      <span class="uss-mobile-label">Menu</span>
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'about' %}">About</a>
+      <a href="{% url 'contact' %}">Contact</a>
+      <a href="{% url 'product_list' %}">Products</a>
+      <a href="{% url 'service_list' %}">Services</a>
+      {% if user.is_staff %}
+      <a href="{% url 'new_product' %}">Add Products</a>
+      <a href="{% url 'new_service' %}">Add A Service</a>
+      <a href="{% url 'admin:index' %}">Admin</a>
+      {% endif %}
+    </div>
+
+    <div class="uss-mobile-section">
+      <span class="uss-mobile-label">Account</span>
+      {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}">👤 {{ user.username }}</a>
+        <a href="{% url 'cart' %}">🛒 Cart
+          {% if cart_item_count and cart_item_count > 0 %}
+            <span class="uss-cart-badge">{{ cart_item_count }}</span>
+          {% endif %}
+        </a>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="uss-mobile-logout">Logout</button>
+        </form>
+      {% else %}
+        <a href="{% url 'Login' %}">Login</a>
+        <a href="{% url 'Signup' %}">Sign Up</a>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+{# ── Backdrop ── #}
+<div class="uss-backdrop" id="ussBackdrop"></div>
+
+<style>
+/* ── Hamburger button ── */
+.uss-toggler {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  z-index: 1100;
+}
+.uss-toggler span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #333;
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  transform-origin: center;
+}
+/* Animate to X when open */
+.uss-toggler.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.uss-toggler.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.uss-toggler.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile drawer ── */
+.uss-mobile-menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: min(300px, 85vw);
+  height: 100dvh;
+  background: #fff;
+  box-shadow: -4px 0 24px rgba(0,0,0,.15);
+  z-index: 1090;
+  overflow-y: auto;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1rem 0 2rem;
+}
+.uss-mobile-menu.open {
+  right: 0;
+}
+
+.uss-mobile-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 3.5rem; /* clear the toggler button */
+}
+
+.uss-mobile-section {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.uss-mobile-section:last-child { border-bottom: none; }
+
+.uss-mobile-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #999;
+  padding: 0.25rem 1.5rem 0.5rem;
+}
+
+.uss-mobile-menu a {
+  display: block;
+  padding: 0.65rem 1.5rem;
+  color: #222;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+.uss-mobile-menu a:hover,
+.uss-mobile-menu a:active {
+  background: #f5f5f5;
+  color: #000;
+}
+
+.uss-mobile-logout {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.65rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #c0392b;
+  transition: background 0.15s;
+}
+.uss-mobile-logout:hover { background: #fff5f5; }
+
+.uss-cart-badge {
+  display: inline-block;
+  background: #dc3545;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  padding: 1px 7px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ── Backdrop ── */
+.uss-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 1080;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.uss-backdrop.open {
+  display: block;
+  opacity: 1;
+}
+
+/* ── Show hamburger only on mobile, hide on desktop ── */
+@media (max-width: 991.98px) {
+  .uss-toggler { display: flex; }
+}
+@media (min-width: 992px) {
+  .uss-mobile-menu,
+  .uss-backdrop { display: none !important; }
+}
+</style>
+
+<script>
+(function () {
+  const toggler  = document.getElementById('ussToggler');
+  const menu     = document.getElementById('ussMobileMenu');
+  const backdrop = document.getElementById('ussBackdrop');
+
+  function openMenu() {
+    menu.classList.add('open');
+    backdrop.classList.add('open');
+    toggler.classList.add('open');
+    toggler.setAttribute('aria-expanded', 'true');
+    menu.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    menu.classList.remove('open');
+    backdrop.classList.remove('open');
+    toggler.classList.remove('open');
+    toggler.setAttribute('aria-expanded', 'false');
+    menu.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  toggler.addEventListener('click', function () {
+    menu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  backdrop.addEventListener('click', closeMenu);
+
+  // Close on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+})();
+</script>
 
 <main>
     {% if messages %}
