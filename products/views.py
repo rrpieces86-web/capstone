@@ -40,8 +40,8 @@ class ProductListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
-        context['brands'] = Brand.objects.all()
+        context['categories'] = Category.objects.all().order_by('name')
+        context['brands'] = Brand.objects.all().order_by('name')
         context['selected_category'] = self.request.GET.get('category')
         context['selected_brand'] = self.request.GET.get('brand')
         return context
