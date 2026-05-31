@@ -41,12 +41,6 @@
       </div>
       <div class="card-actions">
         <a href="{% url 'service_detail' item.id %}" class="btn-detail">Learn More</a>
-        <form method="POST" action="{% url 'cart_add' %}" class="add-to-cart">
-          {% csrf_token %}
-          <input type="hidden" name="service_id" value="{{ item.id }}">
-          <input type="number" min="1" max="10" name="quantity" value="1">
-          <button type="submit">Add to Cart</button>
-        </form>
       </div>
     </div>
     {% endfor %}

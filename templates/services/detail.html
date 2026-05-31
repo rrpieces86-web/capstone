@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}{{ single_service.id }}{% endblock %}
+{% block title %}{{ single_service.title }}{% endblock %}
 {% block css %}<link rel="stylesheet" href="{% static 'css/public.css' %}">{% endblock %}
-
+ 
 {% block content %}
     <div class="detail-wrap">
         <div class="detail-img-container">
@@ -12,27 +12,23 @@
                 <img class="detail-img" src="https://demofree.sirv.com/nope-not-here.jpg" alt="No image">
             {% endif %}
         </div>
-
-        <div class="detail-info"> 
+ 
+        <div class="detail-info">
             <h1>{{ single_service.title }}</h1>
             <div class="detail-price">${{ single_service.price }}</div>
-
+ 
             <p>{{ single_service.description }}</p>
-
+ 
             <div class="detail-meta">
-                <span><strong>In stock</strong> {{ single_service.quantity }}</span>
-
+                <span><strong>In stock:</strong> {{ single_service.quantity }}</span>
             </div>
-
+ 
             {% if user.is_staff %}
             <div style="display:flex;gap:.75rem;margin-top:1.5rem;">
-                <a href="{% url 'edit_service' single_service.id %}" class="btn btn-primary">edit</a>
-                <a href="{% url 'delete_service' single_service.id %}" class="btn btn-danger">delete</a>
+                <a href="{% url 'edit_service' single_service.id %}" class="btn btn-primary">Edit</a>
+                <a href="{% url 'delete_service' single_service.id %}" class="btn btn-danger">Delete</a>
             </div>
             {% endif %}
-            
-
         </div>
-        
     </div>
 {% endblock %}

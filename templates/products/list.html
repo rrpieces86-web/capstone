@@ -9,7 +9,11 @@
 {% block content %}
  
 <div class="page-hero">
-  <h1>{% if selected_category %}{{ selected_category }}{% else %}Products{% endif %}</h1>
+  <h1>
+    {% if selected_category %}{{ selected_category }}
+    {% elif selected_brand %}{{ selected_brand }}
+    {% else %}Products{% endif %}
+  </h1>
   <p class="hero-sub">Decks, trucks, wheels and everything in between</p>
 </div>
  
@@ -17,15 +21,16 @@
  
   <!-- Filter -->
   <div class="catalog-filter">
-    <label for="categoryfilter">Filter by category</label>
     <form method="get">
+      <label for="categoryfilter">Category</label>
       <select name="category" id="categoryfilter" onchange="this.form.submit()">
         <option value="">All categories</option>
         {% for category in categories %}
         <option value="{{ category.name }}" {% if selected_category == category.name %}selected{% endif %}>{{ category.name }}</option>
         {% endfor %}
       </select>
-
+ 
+      <label for="brandfilter">Brand</label>
       <select name="brand" id="brandfilter" onchange="this.form.submit()">
         <option value="">All brands</option>
         {% for brand in brands %}
