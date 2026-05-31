@@ -1,5 +1,5 @@
+import resend
 from django.shortcuts import render, redirect
-from django.core.mail import EmailMessage
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -24,14 +24,15 @@ def contact_view(request):
             phone = form.cleaned_data['phone']
             message = form.cleaned_data['message']
  
-            email_message = EmailMessage(
-                subject=f'Contact Form Submission from {name}',
-                body=f'Name: {name}\nEmail: {email}\nPhone: {phone}\n\nMessage:\n{message}',
-                from_email='onboarding@resend.dev',
-                to=['rrpieces86@gmail.com'],
-                reply_to=[email],
-            )
-            email_message.send(fail_silently=False)
+            resend.api_key = settings.RESEND_API_KEY
+ 
+            resend.Emails.send({
+                "from": "onboarding@resend.dev",
+                "to": "rrpieces86@gmail.com",
+                "reply_to": email,
+                "subject": f"Contact Form Submission from {name}",
+                "text": f"Name: {name}\nEmail: {email}\nPhone: {phone}\n\nMessage:\n{message}",
+            })
  
             messages.success(request, 'Your message was sent successfully!')
             return redirect('contact')
