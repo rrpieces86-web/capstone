@@ -29,14 +29,21 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         category = self.request.GET.get("category")
-        if not category:
-            return Product.objects.all()
-        return Product.objects.filter(category__name__iexact=category)
+        brand = self.request.GET.get("brand")
+        qs = Product.objects.all()
+        if category:
+            qs = qs.filter(category__name__iexact=category)
+        if brand:
+            qs = qs.filter(brand__name__iexact=brand)
+        return qs
+        
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
+        context['brands'] = Brand.objects.all()
         context['selected_category'] = self.request.GET.get('category')
+        context['selected_brand'] = self.request.GET.get('brand')
         return context
 
 

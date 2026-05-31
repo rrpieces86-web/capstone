@@ -25,6 +25,13 @@
         <option value="{{ category.name }}" {% if selected_category == category.name %}selected{% endif %}>{{ category.name }}</option>
         {% endfor %}
       </select>
+
+      <select name="brand" id="brandfilter" onchange="this.form.submit()">
+        <option value="">All brands</option>
+        {% for brand in brands %}
+        <option value="{{ brand.name }}" {% if selected_brand == brand.name %}selected{% endif %}>{{ brand.name }}</option>
+        {% endfor %}
+      </select>
     </form>
   </div>
  
