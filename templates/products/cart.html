@@ -17,12 +17,17 @@
         <div class="cart-items">
             {% for item in items %}
             <div class="cart-item">
-                {% if item.product.img %}
-                    <img src="{{ item.product.img.url }}" alt="{{ item.product.title }}" class="cart-item-img">
+                {% if item.img %}
+                    <img src="{{ item.img.url }}" alt="{{ item.title }}" class="cart-item-img">
                 {% endif %}
                 <div class="cart-item-info">
-                    <strong>{{ item.product.title }}</strong>
-                    <span>Price: ${{ item.product.price }}</span>
+                    <strong>{{ item.title }}</strong>
+                    {% if item.product %}
+                        <span class="cart-item-type">Product</span>
+                    {% else %}
+                        <span class="cart-item-type">Service</span>
+                    {% endif %}
+                    <span>Price: ${{ item.price }}</span>
                     <span>Qty: {{ item.quantity }}</span>
                     <span>Subtotal: ${{ item.subtotal }}</span>
                 </div>

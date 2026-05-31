@@ -23,6 +23,15 @@
                 <span><strong>In stock:</strong> {{ single_service.quantity }}</span>
             </div>
  
+            <form method="POST" action="{% url 'cart_add' %}" style="margin-top: 1.5rem;">
+                {% csrf_token %}
+                <input type="hidden" name="service_id" value="{{ single_service.id }}">
+                <div style="display:flex; gap:.75rem; align-items:center;">
+                    <input type="number" min="1" max="10" name="quantity" value="1" style="width:70px;">
+                    <button type="submit" class="btn btn-success">Add to Cart</button>
+                </div>
+            </form>
+ 
             {% if user.is_staff %}
             <div style="display:flex;gap:.75rem;margin-top:1.5rem;">
                 <a href="{% url 'edit_service' single_service.id %}" class="btn btn-primary">Edit</a>

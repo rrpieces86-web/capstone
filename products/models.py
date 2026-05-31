@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from services.models import Service
  
  
 class Category(models.Model):
@@ -46,14 +47,30 @@ class Order(models.Model):
  
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    # Either product or service will be set — the other will be null
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.IntegerField()
  
     def __str__(self):
-        return f"{self.product.title} - #{self.quantity}"
+        if self.product:
+            return f"{self.product.title} - #{self.quantity}"
+        return f"{self.service.title} - #{self.quantity}"
+ 
+    @property
+    def title(self):
+        return self.product.title if self.product else self.service.title
+ 
+    @property
+    def price(self):
+        return self.product.price if self.product else self.service.price
+ 
+    @property
+    def img(self):
+        return self.product.img if self.product else self.service.img
  
     @property
     def subtotal(self):
-        return self.product.price * self.quantity
+        return self.price * self.quantity
     
     
